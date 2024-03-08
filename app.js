@@ -1,11 +1,25 @@
 const express = require('express');
+const database = require('./config/db')
+const workerRoutes = require('./routes/workerRoute');
+
 const app = express();
 
 app.use(express.json()); 
 
 app.get('/', (req, res) =>{
-    res.send("Sending response to DThiya")
+    res.send('Connected to Dthiya')
 })
 
+app.use('/api', workerRoutes)
 
-app.listen(3000, () => console.log("Server is running at 3000"))
+database.connectToDatabase()
+    .then(()=>{
+         // Start your Express server once the database connection is established
+         const PORT = process.env.PORT || 3000;
+         app.listen(PORT, () => {
+             console.log(`Server is running on port ${PORT}`);
+         });
+     })
+     .catch(error => {
+         console.error('Error starting server:', error);
+     })
