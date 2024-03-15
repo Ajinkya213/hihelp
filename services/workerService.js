@@ -27,7 +27,7 @@ async function getWorkerById(workerId){
     }
 }
 
-async function getAllWorker(){
+async function getAllWorkers(){
     try{
         const worker = await Worker.find({})
 
@@ -43,7 +43,7 @@ async function getAllWorker(){
 
 async function updateWorker(workerId, updatedData){
     try{
-        const worker = await Worker.findByIdAndUpdate(workerId, updatedData, {new: true})
+        const worker = await Worker.findByIdAndUpdate(workerId, updatedData, {new: false})
 
         if(!worker){
             throw Error('Worker not found!')
@@ -57,20 +57,21 @@ async function updateWorker(workerId, updatedData){
 
 async function deleteWorker(workerId){
     try{
-        const worker = Worker.findByIdAndDelete(workerId)
-
+        const worker = await Worker.findByIdAndDelete(workerId)
+        console.log(worker)
         if(!worker){
             throw Error('Worker not found!')
         }
-
         return {message: 'Worker deleted success'}
     }catch (error){
         throw error
     }
 }
+
 module.exports = {
     createWorker,
     updateWorker,
     deleteWorker,
-    getWorkerById
+    getWorkerById,
+    getAllWorkers
 }

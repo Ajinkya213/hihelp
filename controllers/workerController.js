@@ -25,7 +25,45 @@ async function createWorker(req, res) {
     }
 }
 
+async function updateWorker(req, res){
+    try{ 
+        const {workerId} = req.params;
+        const updatedData = req.body;
+        console.log(updatedData)
+        const worker = await workerService.updateWorker(workerId, updatedData)
+
+        res.status(201).json({message: 'Worker updated successfully', worker})
+    }catch (error){
+        console.log(error)
+        res.status(500).json({message: 'Internal server error'})
+    }
+}
+
+async function getAllWorkers(req, res){
+    try{
+        const workers = await workerService.getAllWorkers()
+        res.status(201).json({message: 'List of all workers', workers})
+    }catch(error){
+        console.log(error)
+        res.status(500).json({ error: error.message });
+    }
+}
+
+async function deleteWorker(req,res){
+    try{
+        const {workerId} = req.params;
+        const worker = await workerService.deleteWorker(workerId)
+        res.status(201).json({message: `Worker deleted successfully`, worker})
+    }catch(error){
+        console.log(error)
+        res.status(500).json({error: error.message})
+    }
+}
+
 
 module.exports = {
-    createWorker
+    createWorker,
+    updateWorker,
+    getAllWorkers,
+    deleteWorker
 };
